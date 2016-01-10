@@ -1,0 +1,8 @@
+#!/bin/bash
+
+monat=("januar" "februar" "maerz" "april" "mai" "juni" "juli" "august" "september" "oktober" "november" "dezember")
+
+for ((index=0; $index< ${#monat[@]}; index++));
+do
+echo ${monat[$index]}
+done

@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+#
+# Program itself
+OPCION=
+fnHELP()
+{
+  echo
+  echo "Sir, we need the following parameters:"
+  echo "  1.- A STRING to be searched"
+  echo "  2.- A DOCUMENT to search in"
+  echo
+}
+clear
+if [ -z $2 ] ; then
+  if [ -z $1 ] ; then
+    fnHELP
+    echo "None of the above indicated parameters were properly indicated"
+    echo "I'm afraid, Sir, I cannot continue..."
+    exit
+  else
+    fnHELP
+    echo
+    echo "...but you just entered one parameter. " $1
+    echo "Now, how do you want us to use this parameter? (1/2)"
+    echo "press 1    if you want it to be used as a STRING"
+    echo "press 2    if you want it to be used as a DOCUMENT"
+    until [ "$OPCION" = "1" ] || [ "$OPCION" = "2" ] ; do
+      read OPCION 
+      case $OPCION in
+           1)
+             echo $1 will be used as a STRING 
+             $STRING=$1
+             until [$DOCUMENT]
+           ;;
+           2)
+             echo $1 will be used as a DOCUMENT
+           ;;
+           *)
+               echo "Just press the number 1 or the number 2..."
+           ;;
+        esac
+    done
+  fi
+else
+STRING=$1
+DOCUMENT=$2
+echo
+echo "Acknowledged, Sir!,"
+echo 'we are going to search "'$STRING'" inside ' $DOCUMENT
+echo
+NRCOLS=0
+NRLINES=1
+while read line ; do
+  NRCOLS=`awk -v a="$line" -v b="$STRING" "BEGIN { print index ( a , b ) } " `
+  if [ $NRCOLS -gt 0 ] ; then
+    echo "found at position "$NRLINES","$NRCOLS 
+  fi
+  NRLINES=`expr $NRLINES + 1`
+done < "$DOCUMENT"
+fi
+# error handling
+if [ $? -eq 0 ] ; then
+echo
+echo "Your command brought us once again SUCCESS, Sir!" ;
+else
+  echo
+  echo "I'm afraid an error was encountered, Sir..."
+  exit
+fi
